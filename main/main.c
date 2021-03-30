@@ -37,7 +37,7 @@ int prediction;
 const int capacityOfClass=99;
 
 const char *TAG = "RoomMonitoring";
-TaskHandle_t showRoomStateTask;
+TaskHandle_t showRoomStateTask,publishRoomCountTask;
 
 esp_mqtt_client_handle_t mqttClient = NULL;
 
@@ -86,6 +86,7 @@ void app_main(void)
 	ssd1306_clearScreen();
 	//textDemo();
 	mqttInit();
+	mqttIotInit();
 	
 	
 	gpio_config_t interruptConfig;
@@ -115,6 +116,16 @@ void app_main(void)
 		NULL,        /* parameter of the task */
 		1,           /* priority of the task */
 		&showRoomStateTask,      /* Task handle to keep track of created task */
+		0);          /* pin task to core 0 */  
+
+
+	xTaskCreatePinnedToCore(
+		publishRoomCount,   /* Task function. */
+		"publishRoomCount",     /* name of task. */
+		4000,       /* Stack size of task */
+		NULL,        /* parameter of the task */
+		1,           /* priority of the task */
+		&publishRoomCountTask,      /* Task handle to keep track of created task */
 		0);          /* pin task to core 0 */  
 	
 // 	while (true){

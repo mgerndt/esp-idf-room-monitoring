@@ -9,7 +9,7 @@
 #include "roomMonitoring.h"
 
 void initDisplay(){
-		ssd1306_128x64_i2c_init();
+	ssd1306_128x64_i2c_init();
 	ssd1306_setFixedFont(ssd1306xled_font6x8);
 	
 }
@@ -22,9 +22,9 @@ void showRoomState( void * pvParameters ){
 		ssd1306_clearScreen();
 	
 		char buf[64];
-	    struct tm timeinfo = { 0 };
+		struct tm timeinfo = { 0 };
 		time_t now = 0;
-	    time(&now);
+		time(&now);
 		
 		localtime_r(&now, &timeinfo);
 		sprintf(buf, "G10  %.2d:%.2d",timeinfo.tm_hour,timeinfo.tm_min);
