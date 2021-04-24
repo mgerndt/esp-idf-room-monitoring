@@ -89,24 +89,19 @@ void app_main(void)
 	mqttIotInit();
 	
 	
-	gpio_config_t interruptConfig;
-	interruptConfig.pin_bit_mask = ((1ULL<<interruptPinOut)|(1ULL<<interruptPinIn)); //bit mask for the two pins
-	interruptConfig.mode = GPIO_MODE_INPUT; //input mode
-	interruptConfig.pull_down_en = 1;  //pull_down_en is activated 
-	interruptConfig.intr_type = GPIO_INTR_POSEDGE;
-	gpio_config(&interruptConfig);
 	
+	ESP_ERROR_CHECK(gpio_install_isr_service(ESP_INTR_FLAG_IRAM));
 	
-	gpio_config_t triggerConfig;
-	triggerConfig.pin_bit_mask = ((1ULL<<triggerPinOut)|(1ULL<<triggerPinIn)); //bit mask for the two pins
-	triggerConfig.mode = GPIO_MODE_OUTPUT; 
-	gpio_config(&triggerConfig);
+	ESP_ERROR_CHECK(gpio_set_direction(interruptPinOut, GPIO_MODE_INPUT));
+	ESP_ERROR_CHECK(gpio_pullup_en(interruptPinOut));
+	ESP_ERROR_CHECK(gpio_set_intr_type(interruptPinOut, GPIO_INTR_NEGEDGE));
+	ESP_ERROR_CHECK(gpio_isr_handler_add(interruptPinOut, outISR, NULL));
+
+	ESP_ERROR_CHECK(gpio_set_direction(interruptPinIn, GPIO_MODE_INPUT));
+	ESP_ERROR_CHECK(gpio_pullup_en(interruptPinIn));
+	ESP_ERROR_CHECK(gpio_set_intr_type(interruptPinIn, GPIO_INTR_NEGEDGE));
+	ESP_ERROR_CHECK(gpio_isr_handler_add(interruptPinIn, inISR, NULL));
 	
-	
-	gpio_install_isr_service(ESP_INTR_FLAG_IRAM);
-	//ESP_ERROR_CHECK(gpio_set_intr_type(GPIO_INPUT_IO_0, GPIO_INTR_POSEDGE));
-	gpio_isr_handler_add(interruptPinOut, outISR, NULL);
-	gpio_isr_handler_add(interruptPinIn, inISR, NULL);
 	
 	
 	xTaskCreatePinnedToCore(
