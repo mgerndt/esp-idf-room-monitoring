@@ -20,7 +20,7 @@
 
 uint64_t timestampOut,timestampIn;
 bool inFlag=false, outFlag=false;
-const int debounceDelay=50;
+const int debounceDelay=500;
 
 
 /**
@@ -47,7 +47,7 @@ void IRAM_ATTR outISR(void* arg){
 void IRAM_ATTR inISR(void* arg){
 	
 	if (millis()<timestampIn+debounceDelay) return;
-	timestampOut=millis();
+	timestampIn=millis();
 	ets_printf("Interrupt IN.\n");
 	inFlag=true;
 	
