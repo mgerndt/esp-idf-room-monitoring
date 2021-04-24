@@ -80,24 +80,6 @@ static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
 }
 
 
-void mqttInit(void){
-	static int msg_id = 0;
-	
-	mqtt_event_group = xEventGroupCreate();
-	const esp_mqtt_client_config_t mqtt_cfg = {
-		.event_handle = mqtt_event_handler,
-		.host = "test.mosquitto.org",
-		.port = 1883
-	};
-	
-	
-	mqttClient = esp_mqtt_client_init(&mqtt_cfg);
-	esp_mqtt_client_start(mqttClient);
-	xEventGroupWaitBits(mqtt_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
-	msg_id = esp_mqtt_client_subscribe(mqttClient, "i10_iot",1);
-  ESP_LOGI(TAG, "sent subscribe for i10_iot successful, msg_id=%d", msg_id);
-}
-
 
 void mqttIotInit(void){
 	mqtt_event_group = xEventGroupCreate();
@@ -125,6 +107,10 @@ void publishRoomCount(void * pvParameters){
 		time(&now);
 		sprintf(msg, "{\"username\":\"gerndt\",\"number\":%d,\"device_id\":\"12\",\"timestamp\":%lu000}", count,now);
 		ESP_LOGI(TAG, "Topic %s: %s\n", "2_12", msg);
+		// if (mqttIoTClient){
+		// 	esp_mqtt_client_reconnect(mqttIotClient);
+		// }
+
 		//2_12_27 in Kibana
 		int msg_id = esp_mqtt_client_publish(mqttIotClient,"2_12", msg, strlen(msg), 0, 0);
 		if (msg_id==-1){
@@ -135,5 +121,24 @@ void publishRoomCount(void * pvParameters){
 		//ESP_LOGI(TAG,"Task1 running on core %d",xPortGetCoreID());
 	}
 }
+
+void mqttInit(void){
+	static int msg_id = 0;
+	
+	mqtt_event_group = xEventGroupCreate();
+	const esp_mqtt_client_config_t mqtt_cfg = {
+		.event_handle = mqtt_event_handler,
+		.host = "test.mosquitto.org",
+		.port = 1883
+	};
+	
+	
+	mqttClient = esp_mqtt_client_init(&mqtt_cfg);
+	esp_mqtt_client_start(mqttClient);
+	xEventGroupWaitBits(mqtt_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
+	msg_id = esp_mqtt_client_subscribe(mqttClient, "i10_iot",1);
+  ESP_LOGI(TAG, "sent subscribe for i10_iot successful, msg_id=%d", msg_id);
+}
+
 
 
