@@ -23,6 +23,13 @@
 #define EXAMPLE_ESP_WIFI_PASS      CONFIG_ESP_WIFI_PASSWORD
 #define EXAMPLE_ESP_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
 
+
+//#define EXAMPLE_ESP_WIFI_SSID      "CAPS"
+//#define EXAMPLE_ESP_WIFI_PASS      "caps!schulz-wifi"
+#define EXAMPLE_ESP_WIFI_SSID      "Ferienhaus"
+#define EXAMPLE_ESP_WIFI_PASS      "41970736223254205386"
+#define EXAMPLE_ESP_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
+
 /* FreeRTOS event group to signal when we are connected*/
 static EventGroupHandle_t s_wifi_event_group;
 
