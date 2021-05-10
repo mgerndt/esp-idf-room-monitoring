@@ -88,18 +88,20 @@ void app_main(void)
 	mqttInit();
 	mqttIotInit();
 	
+	ESP_ERROR_CHECK(gpio_set_direction(triggerPinOut, GPIO_MODE_OUTPUT));
+	ESP_ERROR_CHECK(gpio_set_direction(triggerPinIn, GPIO_MODE_OUTPUT));
 	
 	
 	ESP_ERROR_CHECK(gpio_install_isr_service(ESP_INTR_FLAG_IRAM));
 	
 	ESP_ERROR_CHECK(gpio_set_direction(interruptPinOut, GPIO_MODE_INPUT));
 	ESP_ERROR_CHECK(gpio_pullup_en(interruptPinOut));
-	ESP_ERROR_CHECK(gpio_set_intr_type(interruptPinOut, GPIO_INTR_NEGEDGE));
+	ESP_ERROR_CHECK(gpio_set_intr_type(interruptPinOut, GPIO_INTR_POSEDGE));
 	ESP_ERROR_CHECK(gpio_isr_handler_add(interruptPinOut, outISR, NULL));
 
 	ESP_ERROR_CHECK(gpio_set_direction(interruptPinIn, GPIO_MODE_INPUT));
 	ESP_ERROR_CHECK(gpio_pullup_en(interruptPinIn));
-	ESP_ERROR_CHECK(gpio_set_intr_type(interruptPinIn, GPIO_INTR_NEGEDGE));
+	ESP_ERROR_CHECK(gpio_set_intr_type(interruptPinIn, GPIO_INTR_POSEDGE));
 	ESP_ERROR_CHECK(gpio_isr_handler_add(interruptPinIn, inISR, NULL));
 	
 	
