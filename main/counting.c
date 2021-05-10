@@ -27,7 +27,7 @@ const int debounceDelay=500;
    This interrupt handler is called whenever the outer photoelectric barrier is broken.
 */
 void IRAM_ATTR outISR(void* arg){
-	if (millis()<timestampOut+debounceDelay) return;
+	//if (millis()<timestampOut+debounceDelay) return;
 	timestampOut=millis();
 	ets_printf("Interrupt OUT.\n");
 	outFlag=true;
@@ -46,7 +46,7 @@ void IRAM_ATTR outISR(void* arg){
 */
 void IRAM_ATTR inISR(void* arg){
 	
-	if (millis()<timestampIn+debounceDelay) return;
+	//if (millis()<timestampIn+debounceDelay) return;
 	timestampIn=millis();
 	ets_printf("Interrupt IN.\n");
 	inFlag=true;
