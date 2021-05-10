@@ -4,7 +4,7 @@
 void mqttInit(void);
 void mqttIotInit(void);
 void publishRoomCount(void * pvParameters);
-
+void publishCount(void);
 
 
 #endif
