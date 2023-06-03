@@ -24,10 +24,26 @@
 #define EXAMPLE_ESP_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
 
 
-//#define EXAMPLE_ESP_WIFI_SSID      "CAPS"
-//#define EXAMPLE_ESP_WIFI_PASS      "caps!schulz-wifi"
-#define EXAMPLE_ESP_WIFI_SSID      "Ferienhaus"
-#define EXAMPLE_ESP_WIFI_PASS      "41970736223254205386"
+// #define EXAMPLE_ESP_WIFI_SSID      "CAPS"
+// #define EXAMPLE_ESP_WIFI_PASS      "caps!schulz-wifi"
+//#define EXAMPLE_ESP_WIFI_SSID      "Paradise"
+//#define EXAMPLE_ESP_WIFI_PASS      "9446-0123-6044-7388-3450"
+
+// #define EXAMPLE_ESP_WIFI_SSID      "FRITZ!Box 7590 LU"
+// #define EXAMPLE_ESP_WIFI_PASS      "80496371984643005795"
+
+//#define EXAMPLE_ESP_WIFI_SSID      "WLAN-LB3CCQ"
+//#define EXAMPLE_ESP_WIFI_PASS      "32817814541401684397"
+//#define EXAMPLE_ESP_WIFI_SSID      "iPhone von Dr. Gerndt"
+//#define EXAMPLE_ESP_WIFI_PASS      "hiatus3646"
+// #define EXAMPLE_ESP_WIFI_SSID      "caps-lab-wifi"
+// #define EXAMPLE_ESP_WIFI_PASS      "caps-Schulz!09c"
+// #define EXAMPLE_ESP_WIFI_SSID      "capslab"
+// #define EXAMPLE_ESP_WIFI_PASS      "12356789"
+
+#define EXAMPLE_ESP_WIFI_SSID      "CAPS-Seminar-Room"
+#define EXAMPLE_ESP_WIFI_PASS      "caps-schulz-seminar-room-wifi"
+
 #define EXAMPLE_ESP_MAXIMUM_RETRY  CONFIG_ESP_MAXIMUM_RETRY
 
 /* FreeRTOS event group to signal when we are connected*/
@@ -79,8 +95,6 @@ void wifi_init_sta(void)
 	//Initialize the network interface
 	ESP_ERROR_CHECK(esp_netif_init());
 	//Creates the system event loop which handles all events
-	ESP_ERROR_CHECK(esp_event_loop_create_default());
-	//Creates a station network interface object
 	esp_netif_create_default_wifi_sta();
 	//Obtain a default configuration
 	wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
@@ -113,6 +127,7 @@ void wifi_init_sta(void)
 		.sta = {
 			.ssid = EXAMPLE_ESP_WIFI_SSID,
 			.password = EXAMPLE_ESP_WIFI_PASS,
+			.listen_interval = 10, //factor of intervals between beacons
 			.threshold.authmode = WIFI_AUTH_WPA2_PSK,
 			.pmf_cfg = {
 				.capable = true,
@@ -120,6 +135,9 @@ void wifi_init_sta(void)
 			},
 		},
 	};
+	ESP_LOGI(TAG, "esp_wifi_set_ps().");
+    esp_wifi_set_ps(WIFI_PS_MAX_MODEM); //Required to specify list_interval
+
 	//Determines station mode
 	ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
 	//Sets the configuration of the station
@@ -150,5 +168,6 @@ void wifi_init_sta(void)
 	ESP_ERROR_CHECK(esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id));
 	vEventGroupDelete(s_wifi_event_group);
 }
+
 
 

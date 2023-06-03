@@ -9,6 +9,7 @@
 
 
 
+
 #include "esp_sntp.h"
 #include "timeMgmt.h"
 
@@ -32,9 +33,9 @@ void initialize_sntp(void)
 	ESP_LOGI(TAG, "Initializing SNTP");
 	//Poll SNTP server via unicast. Default every hour
 	sntp_setoperatingmode(SNTP_OPMODE_POLL);
-	//Define SNTP server
-	sntp_setservername(1, "pool.ntp.org");
-  sntp_setservername(0, "ntp1.in.tum.de");
+	//Define SNTP server outside and in the MI building
+	// sntp_setservername(0, "pool.ntp.org");
+  	sntp_setservername(0, "ntp1.in.tum.de");
 	//Define update notification function.
 	sntp_set_time_sync_notification_cb(time_sync_notification_cb);
 #ifdef CONFIG_SNTP_TIME_SYNC_METHOD_SMOOTH

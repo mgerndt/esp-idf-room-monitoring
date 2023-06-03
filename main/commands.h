@@ -3,6 +3,8 @@
 
 void leaveRoom();
 void enterRoom();
+void ping();
+void traffic( void * pvParameters );
 	
 
 #endif

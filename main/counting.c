@@ -18,18 +18,20 @@
 #include "roomMonitoring.h"
 
 
-uint64_t timestampOut,timestampIn;
+uint64_t timestampOut=0,timestampIn=0;
 bool inFlag=false, outFlag=false;
-const int debounceDelay=500;
+const int debounceDelay=30;
 
 
 /**
    This interrupt handler is called whenever the outer photoelectric barrier is broken.
 */
 void IRAM_ATTR outISR(void* arg){
-	//if (millis()<timestampOut+debounceDelay) return;
+	//ets_printf("Interrupt OUT %ld %ld.\n",millis(), timestampOut);
+	ets_printf("Interrupt OUT\n");
+	if (millis()<timestampOut+debounceDelay) return;
 	timestampOut=millis();
-	ets_printf("Interrupt OUT.\n");
+	//ets_printf("Interrupt OUT.\n");
 	outFlag=true;
 	
 	if (inFlag){
@@ -45,10 +47,11 @@ void IRAM_ATTR outISR(void* arg){
    This interrupt handler is called whenever the outer photoelectric barrier is broken.
 */
 void IRAM_ATTR inISR(void* arg){
-	
-	//if (millis()<timestampIn+debounceDelay) return;
-	timestampIn=millis();
 	ets_printf("Interrupt IN.\n");
+	
+	if (millis()<timestampIn+debounceDelay) return;
+	timestampIn=millis();
+	//ets_printf("Interrupt IN.\n");
 	inFlag=true;
 	
 	if (outFlag){

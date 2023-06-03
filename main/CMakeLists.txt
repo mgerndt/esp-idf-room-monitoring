@@ -6,4 +6,6 @@ idf_component_register(SRCS
 	"counting.c"
 	"commands.c"
 	"showRoomState.c"
-    INCLUDE_DIRS ".")
+	"log_buffer.c"
+	"smtp.c"
+    EMBED_TXTFILES server_root_cert.pem INCLUDE_DIRS ".")

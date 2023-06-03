@@ -3,5 +3,8 @@
 
 void initDisplay();
 void showRoomState();
+void showCurrent();
+void toggleDisplay( void * pvParameters );
+	
 
 #endif
